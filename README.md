@@ -20,5 +20,9 @@ Iris-setosa: 1.4653061224489796
 Iris-versicolor: 4.26
 Iris-virginica: 5.552
 ```
-And generate a chart like:  
+And generate a bar chart like:  
 ![Alt text](/images/sepal_length_and_petal_length.png?raw=true "sepal length and petal length")
+
+And by simply modifying the ```fields``` variable on line 137 of ```iris.py```(which is sepal length and petal length by default), you can also get averages on different fields.  
+For example, if you modify it to include all fields, you will get a chart like:  
+![Alt text](/images/all_fields.png?raw=true "all_fields")
