@@ -116,7 +116,7 @@ def result_to_chart(avgs):
     ax.set_xlabel('Iris class')
     ax.set_ylabel('Averages')
     ax.set_title('Averages of Iris')
-    ax.set_xticks(index + width / len(fields))
+    ax.set_xticks(index + (len(fields) - 1) / (2 * len(fields)) * width)
     ax.set_xticklabels(x_lables)
     ax.legend()
     fig.tight_layout()
