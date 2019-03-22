@@ -21,3 +21,4 @@ Iris-versicolor: 4.26
 Iris-virginica: 5.552
 ```
 And generate a chart like:
+![Alt text](/images/sepal_length_and_petal_length.png?raw=true "sepal length and petal length")
