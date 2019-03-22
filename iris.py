@@ -1,6 +1,6 @@
-import urllib2
-import csv
-from matplotlib import pyplot as plt
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
 
 # constants for the names of the data fields
 SEPAL_LENGTH = 0
@@ -20,6 +20,7 @@ def compute_avg(data, fields):
     """
     avgs = {}
 
+    # check if field indices are valid
     for field in fields:
         if field not in [0, 1, 2, 3]:
             return False
@@ -28,18 +29,17 @@ def compute_avg(data, fields):
         name_field = field_to_str(field)
         avgs[name_field] = {}
 
-    for row in data:
-        if row:
-            name_class = row[IRIS_CLASS]
-            for field in fields:
-                name_field = field_to_str(field)
-                if name_class in avgs[name_field]:
-                    s = avgs[name_field][name_class][0] + float(row[field])
-                    n = avgs[name_field][name_class][1] + 1
-                else:
-                    s = float(row[field])
-                    n = 1
-                avgs[name_field][name_class] = [s, n]
+    for index, row in data.iterrows():
+        name_class = row[IRIS_CLASS]
+        for field in fields:
+            name_field = field_to_str(field)
+            if name_class in avgs[name_field]:
+                s = avgs[name_field][name_class][0] + float(row[field])
+                n = avgs[name_field][name_class][1] + 1
+            else:
+                s = float(row[field])
+                n = 1
+            avgs[name_field][name_class] = [s, n]
 
     for name_field in avgs:
         for name_class in avgs[name_field]:
@@ -69,7 +69,7 @@ def field_to_str(field):
 def result_to_str(avgs):
     """
     Returns a string representation of the final result
-    :param avgs: final result of all averages computed, which is a dictionary of dictionaries
+    :param avgs: final result of all specified averages, which is a dictionary of dictionaries
     :return: a string representation of the result
     """
     s = ""
@@ -80,20 +80,69 @@ def result_to_str(avgs):
         s += "\n"
     return s
 
+
+def result_to_chart(avgs):
+    """
+    Shows a bar chart of the final result
+    :param avgs: final result of all specified averages, which is a dictionary of dictionaries
+    :return: none
+    """
+    fields = list(avgs.keys())
+
+    x_lables = []
+    for name_class in (avgs[fields[0]]):
+        x_lables.append(name_class)
+    n_groups = len(x_lables)
+
+    ys = {}
+    for field in fields:
+        y = []
+        for name_class in (avgs[field]):
+            y.append(avgs[field][name_class])
+        ys[field] = y
+
+    fig, ax = plt.subplots()
+    index = np.arange(n_groups)
+    width = 0.7
+    bar_width = width / len(fields)
+    opacity = 0.4
+    colors = ['red', 'green', 'blue', 'orange']
+
+    offset = 0
+    for field in fields:
+        rects = ax.bar(index+offset*bar_width, ys[field], bar_width, alpha=opacity, color=colors[offset], label= field)
+        offset += 1
+
+    ax.set_xlabel('Iris class')
+    ax.set_ylabel('Averages')
+    ax.set_title('Averages of Iris')
+    ax.set_xticks(index + width / len(fields))
+    ax.set_xticklabels(x_lables)
+    ax.legend()
+    fig.tight_layout()
+    plt.show()
+
+
 def main():
+    """
+    Parses CSV of iris data from url, computes the average on specified fields(sepal length and petal length by
+    default) for each iris class, prints out the result and show a bar chart of it
+    :return: none
+    """
     # fetch CSV data from url
     url = "https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data"
-    response = urllib2.urlopen(url)
-    iris = csv.reader(response)
+    iris = pd.read_csv(url)
 
     # compute the averages
-    fields = [SEPAL_LENGTH, PETAL_LENGTH] # fields to compute average on, sepal length and petal length by default
+    fields = [SEPAL_LENGTH, PETAL_LENGTH]  # fields to compute average on, sepal length and petal length by default
     avgs = compute_avg(iris, fields)
 
     # print the result
     result = result_to_str(avgs)
-    print result
+    print(result)
 
+    # generate the chart
+    result_to_chart(avgs)
 
 if __name__ == "__main__":
     main()
