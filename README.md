@@ -29,6 +29,6 @@ For example, if you modify it to include all fields, you will get a chart like:
 ![Alt text](/images/all_fields.png?raw=true "all_fields")
 
 ## Inprovement
-This is a simple program and depend a lot on knowledges we already have about the CSV and how we want to parse it. 
+This is a simple program and depend a lot on knowledges we already have about the CSV and how we want to parse it.  
 It makes more sense to extend its functionalities to deal with more than the average on two fixed fields, thus I modified the program a little bit to allow some flexibilities on fields we can choose.  
 It will be better if we allow some inputs from users(url/path, field, type of aggregate function, type of chart, etc.) so that it can deal with more general problems. 
