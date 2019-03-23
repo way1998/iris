@@ -25,6 +25,7 @@ def compute_avg(data, fields):
         if field not in [0, 1, 2, 3]:
             return False
 
+    # compute the average
     for field in fields:
         name_field = field_to_str(field)
         avgs[name_field] = {}
@@ -87,13 +88,14 @@ def result_to_chart(avgs):
     :param avgs: final result of all specified averages, which is a dictionary of dictionaries
     :return: none
     """
+    # build x axis
     fields = list(avgs.keys())
-
-    x_lables = []
+    x_labels = []
     for name_class in (avgs[fields[0]]):
-        x_lables.append(name_class)
-    n_groups = len(x_lables)
+        x_labels.append(name_class)
+    n_groups = len(x_labels)
 
+    # build y axis
     ys = {}
     for field in fields:
         y = []
@@ -108,16 +110,18 @@ def result_to_chart(avgs):
     opacity = 0.4
     colors = ['red', 'green', 'blue', 'orange']
 
+    # generate a bar for each field
     offset = 0
     for field in fields:
         rects = ax.bar(index+offset*bar_width, ys[field], bar_width, alpha=opacity, color=colors[offset], label= field)
         offset += 1
 
+    # build titles and labels and show the plot
     ax.set_xlabel('Iris class')
     ax.set_ylabel('Averages')
     ax.set_title('Averages of Iris')
     ax.set_xticks(index + (len(fields) - 1) / (2 * len(fields)) * width)
-    ax.set_xticklabels(x_lables)
+    ax.set_xticklabels(x_labels)
     ax.legend()
     fig.tight_layout()
     plt.show()
