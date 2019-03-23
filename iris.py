@@ -137,12 +137,15 @@ def main():
     fields = [SEPAL_LENGTH, PETAL_LENGTH]  # fields to compute average on, sepal length and petal length by default
     avgs = compute_avg(iris, fields)
 
-    # print the result
-    result = result_to_str(avgs)
-    print(result)
+    if avgs:
+        # print the result
+        result = result_to_str(avgs)
+        print(result)
 
-    # generate the chart
-    result_to_chart(avgs)
+        # generate the chart
+        result_to_chart(avgs)
+    else: # fields are invalid
+        raise Exception("Invalid fields! ")
 
 if __name__ == "__main__":
     main()
